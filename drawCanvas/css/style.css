@@ -1,0 +1,9 @@
+#myCanvas {
+    border: 1px solid #ccc;
+}
+
+.canvasBox {
+    width: 600px;
+    margin: 0 auto;
+    text-align: center;
+}
