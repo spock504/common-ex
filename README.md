@@ -14,4 +14,5 @@ comment-ex 普普通通的例子，平平淡淡的代码
 1. draw canvas 画板
     文件位置： drawCanvas
     查看效果： 
-    
+    style: 画笔粗细的样式： `
+    `
