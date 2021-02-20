@@ -81,7 +81,7 @@ class MyPromise {
 
         // 调用此方法就是失败
         let reject = (reason) => {
-            console.log('reason',reason);
+            console.log('reason', reason);
             // 状态为 PENDING 时才可以更新状态，防止 executor 中调用了两次 resovle/reject 方法
             if (this.status === PENDING) {
                 this.status = REJECTED;
@@ -178,26 +178,25 @@ class MyPromise {
     }
 }
 
-// catch 用来捕获 promise 的异常，就相当于一个没有成功的 then。
+    // catch 用来捕获 promise 的异常，就相当于一个没有成功的 then。
 MyPromise.prototype.catch = function (errCallback) {
-    return this.then(null, errCallback)
+    return this.then(null, errCallback);
 }
 
-// finally 无论如何都会执行
+    // finally 无论如何都会执行
 MyPromise.prototype.finally = function (callback) {
     return this.then((value) => {
         return MyPromise.resolve(callback()).then(() => value)
-    }, (reason) => {
-        return MyPromise.resolve(callback()).then(() => { throw reason })
-    }
-    )
+}, (reason) => {
+    return MyPromise.resolve(callback()).then(() => { throw reason })
+  })
 }
 
 // promise.all 是解决并发问题的，多个异步并发获取最终的结果（如果有一个失败则失败）。
 MyPromise.all = function (values) {
     if (!Array.isArray(values)) {
         const type = typeof values;
-        return new TypeError(`TypeError: ${type} ${values} is not iterable`)
+        return new TypeError(`TypeError: ${type} $ {values} is not iterable`)
     }
 
     return new MyPromise((resolve, reject) => {
@@ -223,17 +222,17 @@ MyPromise.all = function (values) {
 }
 
 // 采用最快的，不管结果本身是成功状态还是失败状态
-Promise.race = function(promises) {
-    return new Promise((resolve, reject) => {
-      // 一起执行就是for循环
-      for (let i = 0; i < promises.length; i++) {
-        let val = promises[i];
-        if (val && typeof val.then === 'function') {
-          val.then(resolve, reject);
-        } else { // 普通值
-          resolve(val)
+MyPromise.race = function (promises) {
+    return new MyPromise((resolve, reject) => {
+        // 一起执行就是for循环
+        for (let i = 0; i < promises.length; i++) {
+            let val = promises[i];
+            if (val && typeof val.then === 'function') {
+                val.then(resolve, reject);
+            } else { // 普通值
+                resolve(val)
+            }
         }
-      }
     });
 }
 
@@ -265,23 +264,42 @@ Promise.race = function(promises) {
 //     console.log(err, 'error')
 // })
 // 3. all
-let p1 = new MyPromise((resolve, reject) => {
-    setTimeout(() => {
-        resolve('ok1');
-    }, 2000);
-})
+// let p1 = new MyPromise((resolve, reject) => {
+//     setTimeout(() => {
+//         resolve('ok1');
+//     }, 2000);
+// })
 
-let p2 = new MyPromise((resolve, reject) => {
-    setTimeout(() => {
-        reject('ok2');
-    }, 1000);
-})
+// let p2 = new MyPromise((resolve, reject) => {
+//     setTimeout(() => {
+//         reject('ok2');
+//     }, 1000);
+// })
 
-MyPromise.all([1, 2, 3, p1, p2]).then(data => {
-    console.log('resolve', data);
-}, err => {
-    console.log('reject', err);
-})
+// MyPromise.all([1, 2, 3, p1, p2]).then(data => {
+//     console.log('all resolve', data);
+// }, err => {
+//     console.log('all reject', err);
+// })
+
+// 4. race
+// let p1 = new MyPromise((resolve, reject) => {
+//     setTimeout(() => {
+//         resolve('ok1');
+//     }, 1000);
+// })
+
+// let p2 = new MyPromise((resolve, reject) => {
+//     setTimeout(() => {
+//         reject('ok2');
+//     }, 100);
+// })
+
+// MyPromise.race([ p1, p2]).then(data => {
+//     console.log('race resolve', data);
+// }, err => {
+//     console.log('race reject', err);
+// })
 
 
 MyPromise.defer = MyPromise.deferred = function () {
